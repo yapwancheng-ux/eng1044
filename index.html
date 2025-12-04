@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI & E-Commerce Research Portfolio</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+        /* --- CSS VARIABLES & RESET --- */
+        :root {
+            --bg-pure: #f0f8ff; 
+            --bg-card: #ffffff; 
+            --neon-cyan: #008DDA; 
+            --neon-purple: #8A2BE2; 
+            --text-main: #0f172a; 
+            --text-muted: #64748b; 
+            --gradient: linear-gradient(135deg, var(--neon-purple), var(--neon-cyan));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 80px;
+        }
+
+        body {
+            background-color: var(--bg-pure);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; }
+
+        /* --- BACKGROUND EFFECTS --- */
+        .bg-grid {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            opacity: 0.8;
+        }
+
+        .glow-orb {
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(138, 43, 226, 0.1) 0%, rgba(240, 248, 255, 0) 70%);
+            border-radius: 50%;
+            z-index: -1;
+            animation: float 10s infinite ease-in-out;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0); }
+            50% { transform: translate(50px, 50px); }
+            100% { transform: translate(0, 0); }
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(240, 248, 255, 0.95); 
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 141, 218, 0.3);
+            padding: 0 5%;
+            z-index: 1000;
+            height: 70px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav .logo {
+            color: var(--neon-cyan);
+            font-weight: 700;
+            font-family: 'Orbitron';
+            font-size: 1.1rem;
+            white-space: nowrap;
+            margin-right: 20px;
+        }
+
+        .menu-container {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .nav-link {
+            padding: 10px 15px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            border-radius: 4px;
+        }
+
+        .nav-link:hover {
+            color: var(--neon-cyan);
+            background: rgba(0, 141, 218, 0.1);
+            text-shadow: 0 0 8px rgba(0, 141, 218, 0.3);
+        }
+
+        /* Dropdown System */
+        .dropdown { position: relative; display: inline-block; }
+
+        .dropdown-btn {
+            cursor: pointer;
+            padding: 10px 15px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .dropdown-btn:hover { color: var(--neon-cyan); }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: var(--bg-card);
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            z-index: 1;
+            top: 100%;
+            left: 0;
+            overflow: hidden;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .dropdown:hover .dropdown-content { display: block; }
+
+        .dropdown-content a {
+            color: var(--text-muted);
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 0.85rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .dropdown-content a:hover {
+            background-color: rgba(138, 43, 226, 0.1);
+            color: var(--text-main);
+            padding-left: 20px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            background: radial-gradient(circle at center, rgba(255, 255, 255, 0.9) 0%, var(--bg-pure) 100%);
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 15px rgba(138, 43, 226, 0.3);
+        }
+
+        .hero h2 {
+            font-size: 1.2rem;
+            color: var(--neon-cyan);
+            margin-bottom: 2rem;
+        }
+
+        .group-list {
+            margin-bottom: 3rem;
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .group-member {
+            background: rgba(0, 0, 0, 0.05);
+            padding: 10px 25px;
+            border-radius: 50px;
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            font-size: 0.9rem;
+            color: var(--text-main);
+            transition: 0.3s;
+        }
+
+        .group-member:hover {
+            border-color: var(--neon-cyan);
+            background: rgba(0, 141, 218, 0.1);
+            color: var(--neon-cyan);
+        }
+
+        .btn-neon {
+            padding: 15px 40px;
+            background: transparent;
+            border: 2px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            font-family: 'Orbitron';
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 141, 218, 0.1);
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+            border-radius: 5px;
+        }
+
+        .btn-neon:hover {
+            background: var(--neon-cyan);
+            color: var(--bg-pure);
+            box-shadow: 0 0 30px rgba(0, 141, 218, 0.5);
+        }
+
+        /* --- SECTIONS GENERAL --- */
+        section {
+            padding: 100px 10%;
+            min-height: 80vh;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            border-left: 5px solid var(--neon-purple);
+            padding-left: 20px;
+        }
+
+        /* --- TOC --- */
+        .toc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .toc-card {
+            background: var(--bg-card);
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            transition: 0.3s;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .toc-card i {
+            font-size: 2rem;
+            color: var(--neon-purple);
+            margin-bottom: 15px;
+            transition: 0.3s;
+        }
+
+        .toc-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .toc-card:hover i { color: var(--neon-cyan); }
+
+        /* --- SIDE-BY-SIDE PAIRED TIMELINE (LIGHT MODE) --- */
+        .timeline-paired {
+            display: grid;
+            grid-template-columns: 1fr 60px 1fr;
+            max-width: 1000px;
+            margin: 0 auto;
+            align-items: center;
+            position: relative;
+        }
+
+        /* The Vertical Line */
+        .timeline-paired::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 4px;
+            background: var(--neon-cyan);
+            transform: translateX(-50%);
+            border-radius: 2px;
+            z-index: 0;
+            opacity: 0.3;
+        }
+
+        /* The Card */
+        .t-card {
+            background: var(--bg-card);
+            color: var(--text-main);
+            padding: 25px;
+            border-radius: 12px;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            border-left: 5px solid var(--neon-purple);
+            transition: transform 0.3s ease;
+            /* UPDATED: Ensure base text align is left */
+            text-align: left; 
+        }
+
+        .t-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 141, 218, 0.1);
+        }
+
+        .t-card h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            color: var(--neon-cyan);
+            margin-bottom: 8px;
+        }
+
+        .t-card p {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* The Dots */
+        .t-marker {
+            width: 20px;
+            height: 20px;
+            background: var(--bg-pure);
+            border: 3px solid var(--neon-cyan);
+            border-radius: 50%;
+            z-index: 1;
+            margin: 0 auto;
+            margin-bottom: 30px;
+            box-shadow: 0 0 0 4px rgba(0, 141, 218, 0.1);
+        }
+
+        /* UPDATED: Left col is now specifically left aligned */
+        .left-col { grid-column: 1; text-align: left; }
+        .right-col { grid-column: 3; text-align: left; }
+        .center-col { grid-column: 2; display: flex; justify-content: center; }
+
+        /* --- CONTENT STYLES --- */
+        .academic-card {
+            background: var(--bg-card);
+            padding: 40px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border-left: 4px solid var(--neon-cyan);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+
+        .academic-card h3 { color: var(--neon-purple); margin-bottom: 10px; }
+        .academic-card p strong { color: var(--text-main); }
+        .academic-card p { color: var(--text-muted); }
+
+        .pdf-frame {
+            width: 100%;
+            height: 500px;
+            background: #f8f8f8;
+            border: 1px dashed var(--neon-cyan);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-muted);
+            border-radius: 10px;
+            position: relative;
+        }
+        .pdf-frame::before {
+            content: "PDF PREVIEW / FILE UPLOAD";
+            font-family: 'Orbitron';
+            letter-spacing: 2px;
+        }
+
+        .reference-list li {
+            padding: 15px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            font-family: 'Inter', sans-serif;
+            color: var(--text-muted);
+        }
+        .reference-list li:hover {
+            color: var(--neon-cyan);
+            background: rgba(0, 141, 218, 0.05);
+        }
+
+        /* --- REFLECTION --- */
+        .reflection-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .reflection-card {
+            background: var(--bg-card);
+            padding: 30px;
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        .reflection-card.yap, .reflection-card.uzma { border-top: 3px solid var(--neon-cyan); }
+        .reflection-card.amanina, .reflection-card.benedict { border-top: 3px solid var(--neon-purple); }
+
+        .avatar {
+            width: 60px;
+            height: 60px;
+            background: rgba(0,0,0,0.05);
+            border-radius: 50%;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+        }
+        .yap .avatar, .uzma .avatar { color: var(--neon-cyan); box-shadow: 0 0 10px rgba(0, 141, 218, 0.1); }
+        .amanina .avatar, .benedict .avatar { color: var(--neon-purple); box-shadow: 0 0 10px rgba(138, 43, 226, 0.1); }
+        .id { font-size: 0.8rem; font-family: 'Orbitron'; color: var(--text-muted); opacity: 0.7; }
+
+        /* --- GALLERY --- */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .gallery-item {
+            height: 250px;
+            background: #f8f8f8;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-muted);
+            transition: 0.3s;
+            position: relative;
+        }
+        .gallery-item:hover {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 20px rgba(0, 141, 218, 0.1);
+            color: var(--neon-cyan);
+            background: var(--bg-card);
+        }
+
+        footer {
+            text-align: center;
+            padding: 50px;
+            background: #e6eef8;
+            color: #aaa;
+            font-size: 0.8rem;
+            border-top: 1px solid rgba(0,0,0,0.05);
+        }
+
+        @media screen and (max-width: 1100px) {
+            .menu-container { display: none; }
+            nav::after { content: '\f0c9'; font-family: 'Font Awesome 6 Free'; font-weight: 900; color: var(--text-main); font-size: 1.5rem; cursor: pointer; }
+        }
+
+        @media screen and (max-width: 768px) {
+            .timeline-paired {
+                grid-template-columns: 1fr;
+                padding-left: 30px;
+            }
+            .timeline-paired::before { left: 10px; }
+            .left-col, .right-col {
+                grid-column: 1;
+                text-align: left;
+                margin-left: 20px;
+            }
+            .center-col { display: none; }
+            .t-card::before {
+                content: '';
+                position: absolute;
+                left: -36px;
+                top: 50%;
+                width: 12px;
+                height: 12px;
+                background: var(--bg-pure);
+                border: 2px solid var(--neon-cyan);
+                border-radius: 50%;
+            }
+
+            .container { width: 100%; padding-left: 70px; padding-right: 25px; }
+            .reflection-grid { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-grid"></div>
+    <div class="glow-orb" style="top: 10%; left: 10%;"></div>
+    <div class="glow-orb" style="bottom: 10%; right: 10%; width: 300px; height: 300px; background: radial-gradient(circle, rgba(0, 141, 218, 0.1) 0%, rgba(240, 248, 255, 0) 70%);"></div>
+
+    <nav>
+        <div class="logo"><i class="fa-solid fa-microchip"></i> ENG1044</div>
+        
+        <div class="menu-container">
+            <a href="#home" class="nav-link">Home</a>
+            <a href="#toc" class="nav-link">Contents</a>
+            
+            <div class="dropdown">
+                <span class="dropdown-btn">Project Data <i class="fa-solid fa-chevron-down" style="font-size: 0.7rem;"></i></span>
+                <div class="dropdown-content">
+                    <a href="#roadmap">Roadmap</a>
+                    <a href="#outline">Outline</a>
+                    <a href="#written-response">Written Response</a>
+                    <a href="#draft">Draft</a>
+                    <a href="#sources">Sources</a>
+                    <a href="#output">Final Output</a>
+                </div>
+            </div>
+
+            <a href="#reflection" class="nav-link">Reflection</a>
+            <a href="#gallery" class="nav-link">Layout</a>
+        </div>
+    </nav>
+
+    <header id="home" class="hero">
+        <h1>The Role of AI Tools in Shaping Start-ups for Future E-commerce</h1>
+        <h2>Research Portfolio – ENG1044 English for Computer Technology</h2>
+        
+        <div class="group-list">
+            <div class="group-member">Yap Wan Cheng (25122557)</div>
+            <div class="group-member">Nurul Amanina (24106668)</div>
+            <div class="group-member">Nur Uzma Batrisyia (24106197)</div>
+            <div class="group-member">Benedict Musunga (25087370)</div>
+        </div>
+
+        <a href="#toc" class="btn-neon">Enter Portfolio</a>
+    </header>
+
+    <section id="toc">
+        <h2 class="section-title">Table of Contents</h2>
+        <div class="toc-grid">
+            <a href="#roadmap" class="toc-card">
+                <i class="fa-solid fa-timeline"></i>
+                <h3>Roadmap</h3>
+            </a>
+            <a href="#outline" class="toc-card">
+                <i class="fa-solid fa-list-check"></i>
+                <h3>Outline</h3>
+            </a>
+            <a href="#written-response" class="toc-card">
+                <i class="fa-solid fa-pen-nib"></i>
+                <h3>Written Response</h3>
+            </a>
+            <a href="#draft" class="toc-card">
+                <i class="fa-solid fa-file-pdf"></i>
+                <h3>Draft</h3>
+            </a>
+            <a href="#sources" class="toc-card">
+                <i class="fa-solid fa-book-open"></i>
+                <h3>Sources</h3>
+            </a>
+            <a href="#output" class="toc-card">
+                <i class="fa-solid fa-check-double"></i>
+                <h3>Final Output</h3>
+            </a>
+            <a href="#reflection" class="toc-card">
+                <i class="fa-solid fa-users-viewfinder"></i>
+                <h3>Reflection</h3>
+            </a>
+            <a href="#gallery" class="toc-card">
+                <i class="fa-solid fa-images"></i>
+                <h3>Layout & Illus.</h3>
+            </a>
+        </div>
+    </section>
+
+<section id="roadmap">
+    <h2 class="section-title">Project Milestones (13 Weeks)</h2>
+    
+    <div class="timeline-paired">
+
+        <div class="t-card left-col">
+            <h3>Week 1: Assignment Briefing</h3>
+            <p>Lecturer provided a comprehensive briefing on the coursework components, outlining the grading rubrics, submission deadlines, and academic integrity expectations.</p>
+        </div>
+        <div class="center-col"><div class="t-marker"></div></div>
+        <div class="t-card right-col">
+            <h3>Week 2: Group Forming & Pre-research</h3>
+            <p>Finalized team members and established communication channels. Conducted preliminary research to identify viable topics related to AI in e-commerce.</p>
+        </div>
+
+        <div class="t-card left-col">
+            <h3>Week 3: Find Portfolio Platform</h3>
+            <p>Evaluated various platforms for the research portfolio. Selected a coding-based approach (HTML/CSS) to ensure customizability and adherence to technical requirements.</p>
+        </div>
+        <div class="center-col"><div class="t-marker"></div></div>
+        <div class="t-card right-col">
+            <h3>Week 4: Approval of Topic & Thesis Statement</h3>
+            <p>Submitted the proposed research topic and thesis statement to the lecturer. Received approval to proceed with the specific focus on AI tools in start-ups.</p>
+        </div>
+
+        <div class="t-card left-col">
+            <h3>Week 5: Gathering Sources & Constructing Outline</h3>
+            <p>Collected academic journals and credible articles (post-2020). Developed a structured outline organizing main arguments and counter-arguments.</p>
+        </div>
+        <div class="center-col"><div class="t-marker"></div></div>
+        <div class="t-card right-col">
+            <h3>Week 6: Assignment Outlines Consultation</h3>
+            <p>Presented the detailed research outline during consultation. Received feedback on the logical flow and strength of the proposed arguments.</p>
+        </div>
+
+        <div class="t-card left-col">
+            <h3>Week 7: Individual Written Response</h3>
+            <p>Drafted and finalized the Individual Written Response, focusing on personal synthesis of the initial research findings and theoretical concepts.</p>
+        </div>
+        <div class="center-col"><div class="t-marker"></div></div>
+        <div class="t-card right-col">
+            <h3>Week 8: Mid-Sem Break</h3>
+            <p>Utilized the break to review feedback from the written response and deepen the literature review for the upcoming major research paper draft.</p>
+        </div>
+
+        <div class="t-card left-col">
+            <h3>Week 9: Drafting Research Paper</h3>
+            <p>Began the formal writing process for the research paper, expanding the outline into full paragraphs with proper APA in-text citations.</p>
+        </div>
+        <div class="center-col"><div class="t-marker"></div></div>
+        <div class="t-card right-col">
+            <h3>Week 10: Research Paper Consultation</h3>
+            <p>Discussed the draft with the lecturer, focusing on critical evaluation of information, assessing reliability, credibility, and relevance of sources.</p>
+        </div>
+
+        <div class="t-card left-col">
+            <h3>Week 11: Research Paper Editing and Proofreading</h3>
+            <p>Conducted a rigorous peer-review session. Checked for grammatical errors, logical fallacies, and ensured strict adherence to APA 7th edition formatting.</p>
+        </div>
+        <div class="center-col"><div class="t-marker"></div></div>
+        <div class="t-card right-col">
+            <h3>Week 12: Final Review & Portfolio Polish</h3>
+            <p>Finalized the digital portfolio layout, ensuring all artifacts were uploaded. Conducted a final walkthrough of the research paper to ensure zero plagiarism.</p>
+        </div>
+
+        <div class="t-card left-col" style="border-left-color: var(--neon-cyan);">
+            <h3>Week 13: Submission</h3>
+            <p>Submitted the final Research Paper and the link to this Digital Research Portfolio via the student portal before the deadline.</p>
+        </div>
+        <div class="center-col"><div class="t-marker" style="background: var(--neon-cyan);"></div></div>
+        <div class="right-col"></div> 
+
+    </div>
+</section>
+
+    <section id="outline">
+        <h2 class="section-title">Research Outline</h2>
+        <div class="academic-card">
+            <h3>1. Introduction</h3>
+            <p>Definition of AI in the context of start-ups. Thesis statement regarding efficiency and scalability.</p>
+        </div>
+        <div class="academic-card">
+            <h3>2. Background</h3>
+            <p>History of E-commerce evolution. The shift from manual data entry to automated AI systems.</p>
+        </div>
+        <div class="academic-card">
+            <h3>3. Arguments</h3>
+            <p><strong>A.</strong> Enhanced Customer Experience (Personalization).</p>
+            <p><strong>B.</strong> Operational Efficiency (Supply Chain).</p>
+        </div>
+        <div class="academic-card">
+            <h3>4. Counterarguments & Conclusion</h3>
+            <p>Addressing privacy concerns and high implementation costs. Summary of findings.</p>
+        </div>
+    </section>
+
+    <section id="written-response">
+        <h2 class="section-title">Written Response Samples</h2>
+        <div class="academic-card" style="border-left-color: var(--neon-purple);">
+            <h3>Sample 1: The Impact of Chatbots</h3>
+            <p>"Modern start-ups utilize AI-driven chatbots not merely for customer service, but for data aggregation. These neural networks analyze sentiment in real-time, allowing businesses to pivot strategies instantly..."</p>
+        </div>
+        <div class="academic-card" style="border-left-color: var(--neon-purple);">
+            <h3>Sample 2: Predictive Analytics</h3>
+            <p>"By leveraging historical data, new e-commerce platforms can predict inventory shortages before they occur. This 'just-in-time' approach, powered by machine learning algorithms, reduces overhead significantly..."</p>
+        </div>
+    </section>
+
+    <section id="draft">
+        <h2 class="section-title">Full Draft – Research Paper</h2>
+        <div class="pdf-frame">
+            <i class="fa-solid fa-file-lines" style="font-size: 3rem; margin-right: 15px;"></i>
+            <span>[PDF VIEWER PLACEHOLDER]</span>
+        </div>
+    </section>
+
+    <section id="sources">
+        <h2 class="section-title">References (APA)</h2>
+        <ul class="reference-list">
+            <li>Smith, J. (2023). <em>Artificial Intelligence in Modern Business</em>. Tech Press.</li>
+            <li>Doe, A., & Lee, K. (2022). The rise of algorithmic commerce. <em>Journal of E-Commerce Studies, 12</em>(3), 45-67.</li>
+            <li>Global AI Institute. (2024). <em>Future Trends in Start-up Scalability</em>. Retrieved from [URL].</li>
+        </ul>
+    </section>
+
+    <section id="output">
+        <h2 class="section-title">Final Output</h2>
+        <div class="pdf-frame" style="border-color: var(--neon-purple);">
+            <i class="fa-solid fa-award" style="font-size: 3rem; margin-right: 15px; color: var(--neon-purple);"></i>
+            <span>[FINAL SUBMISSION SCREENSHOT]</span>
+        </div>
+        <p style="text-align: center; margin-top: 20px; color: var(--text-muted);">The final research paper submitted for ENG1044.</p>
+    </section>
+
+    <section id="reflection">
+        <h2 class="section-title">Group Reflections</h2>
+        <div class="reflection-grid">
+            <div class="reflection-card yap">
+                <div class="avatar"><i class="fa-solid fa-user-astronaut"></i></div>
+                <h3>Yap Wan Cheng</h3>
+                <p class="id">ID: 25122557</p>
+                <p style="margin-top: 10px; color: var(--text-muted);">"Investigating AI tools opened my eyes to how accessible machine learning has become for small businesses. The research process was rigorous but rewarding."</p>
+            </div>
+            <div class="reflection-card amanina">
+                <div class="avatar"><i class="fa-solid fa-robot"></i></div>
+                <h3>Nurul Amanina</h3>
+                <p class="id">ID: 24106668</p>
+                <p style="margin-top: 10px; color: var(--text-muted);">"I focused on the ethical implications. It was fascinating to balance the efficiency arguments with the privacy concerns inherent in AI data mining."</p>
+            </div>
+            <div class="reflection-card uzma">
+                <div class="avatar"><i class="fa-solid fa-user-gear"></i></div>
+                <h3>Nur Uzma Batrisyia</h3>
+                <p class="id">ID: 24106197</p>
+                <p style="margin-top: 10px; color: var(--text-muted);">"The collaborative aspect of this project taught me the importance of version control and clear communication when compiling complex technical data."</p>
+            </div>
+            <div class="reflection-card benedict">
+                <div class="avatar"><i class="fa-solid fa-brain"></i></div>
+                <h3>Benedict Musunga</h3>
+                <p class="id">ID: 25087370</p>
+                <p style="margin-top: 10px; color: var(--text-muted);">"Designing the roadmap and seeing the project evolve from a simple idea to a full paper was the highlight. The timeline helped keep us on track."</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="gallery">
+        <h2 class="section-title">Layout & Illustrations</h2>
+        <div class="gallery-grid">
+            <div class="gallery-item">
+                <i class="fa-solid fa-diagram-project" style="font-size: 2rem;"></i>
+                <span style="margin-left: 10px;">Mind Map</span>
+            </div>
+            <div class="gallery-item">
+                <i class="fa-solid fa-chart-line" style="font-size: 2rem;"></i>
+                <span style="margin-left: 10px;">Growth Chart</span>
+            </div>
+            <div class="gallery-item">
+                <i class="fa-solid fa-network-wired" style="font-size: 2rem;"></i>
+                <span style="margin-left: 10px;">Process Flow</span>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 ENG1044 Group Project. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>

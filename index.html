@@ -481,9 +481,9 @@
 
         footer {
             text-align: center;
-            padding: 50px;
+            padding: 10px;
             background: #e6eef8;
-            color: #aaa;
+            color: #696969;
             font-size: 0.8rem;
             border-top: 1px solid rgba(0,0,0,0.05);
         }
@@ -522,8 +522,80 @@
             .hero h1 { font-size: 2rem; }
         }
 
+/* HOME BUTTON TOOLTIP */
+.home-btn {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: none;
+    background: linear-gradient(135deg, #8A2BE2, #008DDA);
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    z-index: 2000;
+}
+
+    /* Tooltip text */
+    .home-tooltip {
+        position: absolute;
+        right: 62px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: #ffffff;
+        color: #333;
+        font-size: 0.75rem;
+        padding: 6px 10px;
+        border-radius: 8px;
+        white-space: nowrap;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    /* Small arrow */
+    .home-tooltip::after {
+        content: "";
+        position: absolute;
+        right: -6px;
+        top: 50%;
+        transform: translateY(-50%);
+        border-width: 6px;
+        border-style: solid;
+        border-color: transparent transparent transparent #ffffff;
+    }
+
+    /* Show tooltip on hover */
+    .home-btn:hover .home-tooltip {
+        opacity: 1;
+        transform: translateY(-50%) translateX(-4px);
+    }
+
+    .home-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.35);
+        font-family: 'Orbitron', sans-serif;
+    }
+
     </style>
+    <script>
+function goToTOC() {
+    document.getElementById("toc").scrollIntoView({ behavior: "smooth" });
+}
+</script>
+
+
+
 </head>
+<button class="home-btn" onclick="goToTOC()">
+    <i class="fa-solid fa-house"></i>
+    <span class="home-tooltip">Back to Table of Contents</span>
+</button>
 <body>
 
     <div class="bg-grid"></div>
@@ -553,9 +625,9 @@
     </nav>
 
     <header id="home" class="hero">
-        <h1>The Role of AI Tools in Shaping Start-ups for Future E-commerce</h1>
+        <h1>AI Tools in Shaping Start-ups for <br> Future E-commerce</h1>
         <h2>Research Portfolio – ENG1044 English for Computer Technology</h2>
-        <h2>Date-18/12/2025</h2>
+        <h2>Date-18/12/2025 [Group 2]</h2>
 
         <div class="group-list">
             <div class="group-member">Yap Wan Cheng (25122557)</div>
@@ -1067,7 +1139,7 @@
     </section>
 
     <footer>
-        <p>&copy; 2025 ENG1044 Group Project. All Rights Reserved.</p>
+        <p>&copy; 2025 ENG1044 Group 2. All Rights Reserved.</p>
     </footer>
 
 </body>
